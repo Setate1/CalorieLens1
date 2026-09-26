@@ -15,7 +15,7 @@ import {
 import {
   validateAndSanityCheckItem,
   evaluateMealConfidenceSafeguard,
-} from "../src/server/sanityChecker.js";
+} from "../server/sanityChecker.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

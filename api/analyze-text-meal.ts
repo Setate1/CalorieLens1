@@ -8,7 +8,7 @@ import {
   serverDb, 
   CACHE_COLLECTION_NAME 
 } from "../server.js";
-import { validateAndSanityCheckItem } from "../src/server/sanityChecker.js";
+import { validateAndSanityCheckItem } from "../server/sanityChecker.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
