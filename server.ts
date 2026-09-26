@@ -32,7 +32,7 @@ if (getAdminApps().length === 0) {
   });
 }
 
-const rateLimitCache = new Map<string, { count: number, resetTime: number }>();
+export const rateLimitCache = new Map<string, { count: number, resetTime: number }>();
 
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY || firebaseAppletConfig.apiKey || "AIzaSyCPfMrTNupafRas9ZD1Yu8R1cqPT37Xxy4",
@@ -48,12 +48,12 @@ const serverDatabaseId =
   "ai-studio-remixcalorielens-b4282620-b4fe-4c21-a466-db930886b3d2";
 
 const serverApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const serverDb = serverDatabaseId ? getFirestore(serverApp, serverDatabaseId) : getFirestore(serverApp);
+export const serverDb = serverDatabaseId ? getFirestore(serverApp, serverDatabaseId) : getFirestore(serverApp);
 
-const CACHE_COLLECTION_NAME = "recognized_foods_cache";
+export const CACHE_COLLECTION_NAME = "recognized_foods_cache";
 const serverRecognizedFoodsCache = new Map<string, any>();
 
-function normalizeServerCacheKey(name: string): string {
+export function normalizeServerCacheKey(name: string): string {
   return (name || "")
     .toLowerCase()
     .trim()
@@ -96,8 +96,8 @@ class BoundedCache<K, V> extends Map<K, V> {
     return super.set(key, value);
   }
 }
-const mealAnalysisCache = new BoundedCache<string, any>(200);
-const PRESET_SAMPLE_MEALS: Record<string, any[]> = {};
+export const mealAnalysisCache = new BoundedCache<string, any>(200);
+export const PRESET_SAMPLE_MEALS: Record<string, any[]> = {};
 
 // Seed sample meals into the deterministic cache so demo plates always work instantly & reliably
 try {
@@ -597,7 +597,7 @@ const foodItemSchema = {
   ],
 };
 
-const mealAnalysisResponseSchema = {
+export const mealAnalysisResponseSchema = {
   type: Type.OBJECT,
   properties: {
     is_unrecognized_or_low_confidence: {
@@ -621,7 +621,7 @@ const mealAnalysisResponseSchema = {
 
 // Lazy initialization of Gemini client
 let geminiClient: GoogleGenAI | null = null;
-function getGeminiClient(): GoogleGenAI {
+export function getGeminiClient(): GoogleGenAI {
   if (!geminiClient) {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
