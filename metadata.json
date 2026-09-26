@@ -1,0 +1,10 @@
+{
+  "name": "CalorieLens",
+  "description": "Snap your meal and understand what's on your plate with AI-powered nutrition estimation.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

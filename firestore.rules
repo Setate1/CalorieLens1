@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Rules for nutrition_logs collection
+    match /nutrition_logs/{logId} {
+      allow read, update, delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+    }
+
+    // Rules for recognized_foods_cache collection (public cache of food definitions)
+    match /recognized_foods_cache/{cacheId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasAny(['sourceCount', 'confidence', 'lastUpdatedAt', 'imageSignature']);
+      allow delete: if false;
+    }
+
+    // Rules for user profile and user-scoped subcollections (e.g. knownMeals, goals)
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+
+      match /knownMeals/{mealKey} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+
+      match /{allSubcollections=**} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+  }
+}

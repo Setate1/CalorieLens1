@@ -1,0 +1,101 @@
+{
+  "entities": {
+    "NutritionLog": {
+      "title": "NutritionLog",
+      "description": "User saved food analysis record in Firestore",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "User ID owning this log entry"
+        },
+        "foodName": {
+          "type": "string",
+          "description": "Detected name or summary of the food items",
+          "maxLength": 500
+        },
+        "calories": {
+          "type": "number",
+          "description": "Calculated total calories in kcal"
+        },
+        "protein": {
+          "type": "number",
+          "description": "Total protein in grams"
+        },
+        "carbs": {
+          "type": "number",
+          "description": "Total carbohydrates in grams"
+        },
+        "fat": {
+          "type": "number",
+          "description": "Total fat in grams"
+        },
+        "weight": {
+          "type": "number",
+          "description": "Total food weight in grams"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Vision analysis confidence score from 0 to 100"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the analysis was saved"
+        }
+      },
+      "required": ["uid", "foodName", "calories", "protein", "carbs", "fat", "weight", "confidence", "createdAt"]
+    },
+    "RecognizedFoodCache": {
+      "title": "RecognizedFoodCache",
+      "description": "Shared cache for packaged/branded products across users",
+      "type": "object",
+      "properties": {
+        "foodName": { "type": "string" },
+        "calories": { "type": "number" },
+        "protein": { "type": "number" },
+        "carbs": { "type": "number" },
+        "fat": { "type": "number" },
+        "weight": { "type": "number" },
+        "confidence": { "type": "number" },
+        "category": { "type": "string" },
+        "usageCount": { "type": "number" }
+      },
+      "required": ["foodName", "calories", "protein", "carbs", "fat", "weight", "usageCount"]
+    },
+    "KnownMeal": {
+      "title": "KnownMeal",
+      "description": "User persistent Meal Memory recognition cache entry",
+      "type": "object",
+      "properties": {
+        "mealKey": { "type": "string" },
+        "title": { "type": "string" },
+        "normalizedTitle": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "items": { "type": "array" },
+        "itemsSummary": { "type": "object" },
+        "defaultWeightGrams": { "type": "number" },
+        "imageSignature": { "type": "string" },
+        "useCount": { "type": "number" },
+        "isUserCorrected": { "type": "boolean" },
+        "lastUsedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["mealKey", "title", "normalizedTitle", "items", "useCount", "defaultWeightGrams", "isUserCorrected"]
+    }
+  },
+  "firestore": {
+    "/nutrition_logs/{logId}": {
+      "schema": "NutritionLog",
+      "description": "Collection storing food nutrition analyses per user"
+    },
+    "/recognized_foods_cache/{cacheId}": {
+      "schema": "RecognizedFoodCache",
+      "description": "Shared cache of packaged/branded food products"
+    },
+    "/users/{userId}/knownMeals/{mealKey}": {
+      "schema": "KnownMeal",
+      "description": "User specific meal memory recognition cache"
+    }
+  }
+}
